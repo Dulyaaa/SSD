@@ -1,0 +1,76 @@
+const { response } = require('express');
+const User = require('../model/user.model');
+const Encrypt = require('../config/crypto.js');
+
+// Add new user
+const createUser = async (req, res) => {
+    if (req.body) {
+        const user = new User(req.body);
+        await user.save()
+            .then(data => {
+                res.status(200).send({ data: data });
+            })
+            .catch(error => {
+                res.status(500).send({ error: error.message });
+            });
+    }
+}
+
+// const getUserById = async (req, res) => {
+//     if (req.params && req.params.userId) {
+//         await User.findById(req.params.userId)
+//             .then(data => {
+//                 res.status(200).send({ data: data });
+//             })
+//             .catch(error => {
+//                 res.status(500).send({ error: error.message });
+//             })
+//     }
+// }
+
+// Get user by user id
+const getUserByEmail = async (req, res) => {
+    if (req.params && req.params.email) {
+        await User.find({ email: req.params.email })
+            .then(data => {
+                res.status(200).send({ data });
+            })
+            .catch(error => {
+                res.status(500).send({ error: error.message });
+            })
+    }
+
+}
+
+// const getAll = async (req, res) => {
+//     await User.find()
+//         .then(data => {
+//             res.status(200).send({ data: data });
+//         })
+//         .catch(error => {
+//             res.status(500).send({ error: error.message })
+//         })
+// }
+
+const updateUser = async (req, res) => {
+    // await User.find({ userId: req.params.userId })
+    const userId = req.params.userId
+    // let token = JSON.parse(req.headers['authorization'])
+    let token = req.headers['authorization']
+    token = Encrypt.encrypt(token)
+    await User.findByIdAndUpdate({ '_id': userId }, { accessToken: token })
+        .then(data => {
+            res.status(200).send({ data: data });
+        })
+        .catch(error => {
+            console.log("error", error)
+            res.status(500).send({ error: error.message });
+        })
+}
+
+module.exports = {
+    createUser,
+    getUserByEmail,
+    // getAll,
+    updateUser
+};
