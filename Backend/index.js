@@ -5,6 +5,7 @@ const PORT = process.env.PORT;
 const https = require('https')
 const path = require('path')
 const fs = require('fs')
+const connectDB = require('./src/config/db');
 
 // Middleware
 require('dotenv').config();
@@ -20,14 +21,19 @@ const options = {
     cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
 }
 
+// Establishing the database connection
+connectDB();
+
 // Default Path
 app.route('/').get((req, res) => {
     res.send('SSD Secure Implementation');
 });
 
 const authAPI = require('./api/auth.api');
+const userAPI = require('./src/api/user.api');
 
 app.use('/api/oauth', authAPI);
+app.use('/user', userAPI());
 
 const sslServer = https.createServer(options, app)
 

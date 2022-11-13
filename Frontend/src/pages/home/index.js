@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 // import { GoogleLogin } from 'react-google-login';
 // import LogoutButton from '../../components/logout';
-// import AuthService from '../../services/auth.services';
+import AuthService from '../../services/auth.services';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
 
 const clientId = "954998022306-tqeded1i8jsf5eemm7so5f28p8urr138.apps.googleusercontent.com";
+const scope = "https://www.googleapis.com/auth/drive";
 
 export default class Home extends Component {
     constructor(props) {
@@ -13,29 +14,65 @@ export default class Home extends Component {
         this.state = {
             userObject: {}
         };
-        this.handleCallbackResponse = this.handleCallbackResponse.bind(this);
-        // this.googleAuthentication = this.googleAuthentication.bind(this);
+        this.userAuthenticate = this.userAuthenticate.bind(this);
+        this.getToken = this.getToken.bind(this);
+        this.sendToken = this.sendToken.bind(this);
+        this.getUser = this.getUser.bind(this);
     }
 
     componentDidMount = () => {
         /* global google */
         google.accounts.id.initialize({
             client_id: clientId,
-            callback: this.handleCallbackResponse
+            callback: this.userAuthenticate
         });
     }
 
-    handleCallbackResponse = (response) => {
-        console.log("jhjdhfj", response.credential);
+    userAuthenticate = (response) => {
         const userDetails = jwt_decode(response.credential);
-        console.log("jhjdhfj", userDetails);
         this.setState({
             userObject: userDetails
         });
         localStorage.setItem("UserLogged", "UserLogged");
         localStorage.setItem("userCredentials", JSON.stringify(userDetails));
-        this.props.history.push('/profile')
+
+        this.getUser(userDetails.email)
     }
+
+    getUser = (email) => {
+        AuthService.getUser(email)
+            .then(response => {
+                if (response.status === 200) {
+                    console.log("fjh", response.data.data[0])
+                    localStorage.setItem("user-role", response.data.data[0].role);
+                    this.getToken(response.data.data[0]._id);
+                }
+            })
+    }
+
+    getToken = (userId) => {
+        const token = google.accounts.oauth2.initTokenClient({
+            client_id: clientId,
+            scope: scope,
+            callback: (tokenResponse) => {
+                console.log("hghhjg", tokenResponse.access_token)
+                localStorage.setItem("token", tokenResponse.access_token);
+                this.sendToken(userId, tokenResponse.access_token);
+            }
+        })
+        token.requestAccessToken();
+    }
+
+    sendToken = (userId, token) => {
+        AuthService.sendToken(userId, token)
+            .then(response => {
+                if (response.status === 200) {
+                    this.props.history.push('/profile')
+                }
+            })
+    }
+
+
 
     // googleAuthentication(response) {
     //     console.log("hfjhghjg", response)
@@ -95,12 +132,12 @@ export default class Home extends Component {
                                     Sign in with google
                                 </button>
                             )}
-                            onSuccess={this.handleCallbackResponse}
-                            onFailure={this.handleCallbackResponse}
+                            onSuccess={this.userAuthenticate}
+                            onFailure={this.userAuthenticate}
                             cookiePolicy={"single_host_origin"}
-                            // theme={"filled_black"}
-                            // size={"medium"}
-                            // shape={"circle"}
+                        // theme={"filled_black"}
+                        // size={"medium"}
+                        // shape={"circle"}
                         />
                     </div>
                     {/* <LogoutButton /> */}
