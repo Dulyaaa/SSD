@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 mongoose
 .connect(
-    "mongodb+srv://dotnetuser:dotty@cluster0.wseiz.mongodb.net/?retryWrites=true&w=majority",
+    "mongodb+srv://dotnetuser:dotty@cluster0.wseiz.mongodb.net/SSD_DB?retryWrites=true&w=majority",
     {useNewUrlParser:true, useUnifiedTopology:true}
 )
 
