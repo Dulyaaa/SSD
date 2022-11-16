@@ -5,7 +5,6 @@ const PORT = process.env.PORT;
 const https = require('https')
 const path = require('path')
 const fs = require('fs')
-const mongoose = require('mongoose');
 const messageAPI = require('./messageAPI');
 
 // Middleware
@@ -21,22 +20,7 @@ const options = {
     key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
     cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
 }
-const MONGODB_URI = process.env.MONGODB_URI;
 
-mongoose.connect(MONGODB_URI, {
-    useCreateIndex:true,
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-    useFindAndModify:false
-}, (error) => {
-    if(error){
-    console.log('Database error', error.message);
-}
-});
-
-mongoose.connection.once('open', () => {
-    console.log('Database synced');
-});
 // Default Path
 app.route('/').get((req, res) => {
     res.send('SSD Secure Implementation');
@@ -44,8 +28,9 @@ app.route('/').get((req, res) => {
 
 const authAPI = require('./api/auth.api');
 
+
 app.use('/api/oauth', authAPI);
-app.use('/message', messageAPI());
+app.use('/message', messageAPI);
 
 const sslServer = https.createServer(options, app)
 
