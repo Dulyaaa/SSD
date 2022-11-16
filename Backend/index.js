@@ -5,7 +5,6 @@ const PORT = process.env.PORT;
 const https = require('https')
 const path = require('path')
 const fs = require('fs')
-const messageAPI = require('./messageAPI');
 const connectDB = require('./src/config/db');
 
 // Middleware
@@ -32,10 +31,11 @@ app.route('/').get((req, res) => {
 
 const authAPI = require('./api/auth.api');
 const userAPI = require('./src/api/user.api');
+const messageAPI = require('./src/api/messageAPI');
 
 
 app.use('/api/oauth', authAPI);
-app.use('/message', messageAPI);
+app.use('/message', messageAPI());
 app.use('/user', userAPI());
 
 const sslServer = https.createServer(options, app)
