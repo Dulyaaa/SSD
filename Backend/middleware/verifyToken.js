@@ -29,7 +29,7 @@ const verifyManager = (req, res, next) => {
 
   try {
     // Only authorizes users with a manager token
-    const verified = jwt.verify(token, process.env.AUTH_TOKEN_SECRET_MANAGER);
+    jwt.verify(token, process.env.AUTH_TOKEN_SECRET_MANAGER);
 
     next();
   } catch (error) {

@@ -11,7 +11,6 @@ module.exports = function () {
   router.post("/update/:userId", userController.updateUser);
 
   // TODO - Should implement message and file sending functionalitites
-  router.post("/user/upload-file", verifyManager, userController.uploadFile);
 
   return router;
 };
