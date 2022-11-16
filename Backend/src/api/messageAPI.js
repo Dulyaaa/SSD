@@ -1,9 +1,10 @@
-const express = require('express');
+const express = require("express");
+const { verifyWorker } = require("../../middleware/verifyToken");
 const router = express.Router();
-const controller = require('../controller/messageController');
+const controller = require("../controller/messageController");
 
-module.exports = function(){
-    router.post('/create', controller.createMessage);
+module.exports = function () {
+  router.post("/create", verifyWorker, controller.createMessage);
 
-    return router;
-}
+  return router;
+};
