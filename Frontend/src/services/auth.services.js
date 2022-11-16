@@ -2,6 +2,10 @@ import axios from 'axios';
 
 class AuthService {
 
+    getUser(email){
+        return axios.get(`https://localhost:8080/user/user/${email}`)
+    }
+
     getAuth() {
         return axios.get('https://localhost:8080/api/oauth/getAuthURL/')
     }
@@ -27,6 +31,17 @@ class AuthService {
             headers: {
                 Accept: "application/json",
                 'Authorization': localStorage.getItem("token")
+            }
+        })
+    }
+
+    sendToken(userId, token) {
+        return axios.request({
+            url: `https://localhost:8080/user/update/${userId}`,
+            method: 'POST',
+            headers: {
+                Accept: "application/json",
+                'Authorization': token
             }
         })
     }
