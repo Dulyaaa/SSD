@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Home from './pages/home';
-import Profile from './pages/profile';
+import React, { Component } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Home from "./pages/home";
+import Profile from "./pages/profile";
+import NewUser from "./pages/newUser";
 // import Footer from './pages/footer';
-import './App.css';
+import "./App.css";
 
 export default class App extends Component {
   render() {
@@ -14,12 +15,13 @@ export default class App extends Component {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/profile" component={Profile} />
+              <Route exact path="/add-employee" component={NewUser} />
               <Route exact path="*" component={Error} />
             </Switch>
           </BrowserRouter>
         </div>
         {/* <Footer /> */}
       </div>
-    )
+    );
   }
 }
