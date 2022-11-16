@@ -55,7 +55,7 @@ const NewUser = () => {
         setSuccess(null);
       }, 2000);
     } else {
-      setError(response);
+      setError("Please fill all fields");
       setTimeout(() => setError(null), 3000);
     }
   };
