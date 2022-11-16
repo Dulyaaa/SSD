@@ -1,5 +1,5 @@
 const express = require("express");
-const { verifyWorker } = require("../../middleware/verifyToken");
+const { verifyManager } = require("../../middleware/verifyToken");
 const router = express.Router();
 const userController = require("../controller/user.controller");
 
@@ -11,8 +11,7 @@ module.exports = function () {
   router.post("/update/:userId", userController.updateUser);
 
   // TODO - Should implement message and file sending functionalitites
-  router.post("/user/post-message", verifyWorker, userController.postMessage);
-  router.post("/user/upload-file", verifyWorker, userController.uploadFile);
+  router.post("/user/upload-file", verifyManager, userController.uploadFile);
 
   return router;
 };

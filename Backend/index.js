@@ -31,8 +31,11 @@ app.route('/').get((req, res) => {
 
 const authAPI = require('./api/auth.api');
 const userAPI = require('./src/api/user.api');
+const messageAPI = require('./src/api/messageAPI');
+
 
 app.use('/api/oauth', authAPI);
+app.use('/message', messageAPI());
 app.use('/user', userAPI());
 
 const sslServer = https.createServer(options, app)
