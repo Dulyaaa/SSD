@@ -5,20 +5,20 @@
     text-align: center;
 }
 
-.left-p {
-    flex: 1;
+.right-p {
+    flex: 2;
     background: rgb(255, 255, 255);
 }
 
-.right-p {
-    flex: 1;
+.left-p {
+    flex: 0.25;
     background: rgb(226, 216, 32);
 }
 
 h3 {
-    font-weight: 900;
+    font-weight: 500;
     color: #383838;
-    font-size: 4em;
+    font-size: 3em;
     letter-spacing: 4px;
     line-height: 1em;
     margin: 0;
@@ -107,4 +107,38 @@ h2 {
     /* width: 30%; */
     margin-top: 20px;
     /* margin-left: 65px; */
+}
+
+
+button.primary {
+    background-color: #00bcd1;
+    border-radius: 5px;
+    color: #231E39;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+    padding: 10px 25px;
+}
+
+.round {
+    border: 4px solid #454545;
+    border-radius: 50%;
+    padding: 3px;
+}
+
+.card {
+    border: 4px solid #454545;
+    padding: 3px;
+
+}
+
+.card-img-top {
+    width: 50ex;
+    height: 30ex;
+    margin-top: 3ex;
+
+}
+
+.buttons {
+    margin-top: 3ex;
+
 }
